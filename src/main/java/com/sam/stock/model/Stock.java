@@ -157,6 +157,60 @@ public class Stock {
 		 */
 		private Double zhenfu;
 		
+
+		/**
+		 * 外盘
+		 */
+		private long waipan;
+		/**
+		 * 内盘
+		 */
+		private long neipan;
+		/**
+		 * 换手率
+		 */
+		private double change_rate;
+		/**
+		 * 市盈率
+		 */
+		private double shiying_rate;
+		
+		/**
+		 * 流通市值
+		 * @param code
+		 * @param datas
+		 * @param type
+		 */
+		private double liutong_price;
+		/**
+		 * 总市值
+		 * @param code
+		 * @param datas
+		 * @param type
+		 */
+		private double total_price;
+		/**
+		 * 市净率
+		 * @param code
+		 * @param datas
+		 * @param type
+		 */
+		private double shijing_rate;
+		/**
+		 * 涨停价
+		 * @param code
+		 * @param datas
+		 * @param type
+		 */
+		private double limitUp_price;
+		/**
+		 * 跌停价
+		 * @param code
+		 * @param datas
+		 * @param type
+		 */
+		private double limitDown_price;
+		
 		public Double getZhenfu() {
 			return (this.today_top_price-this.today_open_price)/this.today_open_price*100;
 		}
@@ -378,7 +432,19 @@ public class Stock {
 			this.type = type;
 		}
 		
-		public Stock(String code, String[] datas, String type){
+		public Stock(String code, String[] datas, String type, String siteName){
+			if(siteName.equals("sina")){
+				initSinaData(code, datas, type);
+				up_rate = (cur_price-yesterday_close_price)/yesterday_close_price*100;
+			} else if(siteName.equals("tencent")){
+				initTencentData(code, datas, type);
+			}
+			
+			
+		}
+		
+		
+		public void initSinaData(String code, String[] datas, String type){
 			stock_code = code;
 			stock_name = datas[0];
 			today_open_price = Double.parseDouble(datas[1]);
@@ -419,8 +485,154 @@ public class Stock {
 			time = datas[31];
 			
 			this.type = type;
+		}
+		
+		
+		
+		public long getWaipan() {
+			return waipan;
+		}
+		public void setWaipan(long waipan) {
+			this.waipan = waipan;
+		}
+		public long getNeipan() {
+			return neipan;
+		}
+		public void setNeipan(long neipan) {
+			this.neipan = neipan;
+		}
+		public double getChange_rate() {
+			return change_rate;
+		}
+		public void setChange_rate(double change_rate) {
+			this.change_rate = change_rate;
+		}
+		public double getShiying_rate() {
+			return shiying_rate;
+		}
+		public void setShiying_rate(double shiying_rate) {
+			this.shiying_rate = shiying_rate;
+		}
+		public double getLiutong_price() {
+			return liutong_price;
+		}
+		public void setLiutong_price(double liutong_price) {
+			this.liutong_price = liutong_price;
+		}
+		public double getTotal_price() {
+			return total_price;
+		}
+		public void setTotal_price(double total_price) {
+			this.total_price = total_price;
+		}
+		public double getShijing_rate() {
+			return shijing_rate;
+		}
+		public void setShijing_rate(double shijing_rate) {
+			this.shijing_rate = shijing_rate;
+		}
+		public double getLimitUp_price() {
+			return limitUp_price;
+		}
+		public void setLimitUp_price(double limitUp_price) {
+			this.limitUp_price = limitUp_price;
+		}
+		public double getLimitDown_price() {
+			return limitDown_price;
+		}
+		public void setLimitDown_price(double limitDown_price) {
+			this.limitDown_price = limitDown_price;
+		}
+		public String getDatetime() {
+			return datetime;
+		}
+		public void setDatetime(String datetime) {
+			this.datetime = datetime;
+		}
+
+
+		/**
+		 * 时间
+		 */
+		private String datetime;
+		
+		public void initTencentData(String code, String[] datas, String type){
+			stock_name = datas[1];
+			stock_code = datas[2];
+			cur_price = Double.parseDouble(datas[3]);
+			yesterday_close_price = Double.parseDouble(datas[4]);
+			today_open_price = Double.parseDouble(datas[5]);
+			turnover = Long.parseLong(datas[6]);
 			
-			up_rate = (cur_price-yesterday_close_price)/yesterday_close_price*100;
+			waipan = Long.parseLong(datas[7]);
+			neipan = Long.parseLong(datas[8]);
+			
+
+			buy1_price = Double.parseDouble(datas[9]);
+			buy1_count = Long.parseLong(datas[10]);
+			buy2_price = Double.parseDouble(datas[11]);
+			buy2_count = Long.parseLong(datas[12]);
+			buy3_price = Double.parseDouble(datas[13]);
+			buy3_count = Long.parseLong(datas[14]);
+			buy4_price = Double.parseDouble(datas[15]);
+			buy4_count = Long.parseLong(datas[16]);
+			buy5_price = Double.parseDouble(datas[17]);
+			buy5_count = Long.parseLong(datas[18]);
+			
+
+			sell1_price = Double.parseDouble(datas[19]);
+			sell1_count = Long.parseLong(datas[20]);
+			sell2_price = Double.parseDouble(datas[21]);
+			sell2_count = Long.parseLong(datas[22]);
+			sell3_price = Double.parseDouble(datas[23]);
+			sell3_count = Long.parseLong(datas[24]);
+			sell4_price = Double.parseDouble(datas[25]);
+			sell4_count = Long.parseLong(datas[26]);
+			sell5_price = Double.parseDouble(datas[27]);
+			sell5_count = Long.parseLong(datas[28]);
+			
+			//最近逐笔成交
+			String each_price = datas[29];
+			//时间
+			datetime = datas[30];
+//			date = datas[30];
+//			time = datas[31];
+			
+			
+			up_rate = Double.parseDouble(datas[31]);
+//			up_count = Double.parseDouble(datas[32]);
+			
+			today_top_price = Double.parseDouble(datas[33]);
+			today_bottom_price = Double.parseDouble(datas[34]);
+			
+			//价格/成交量（手）/成交额
+			String _temp = datas[35];
+			
+			turnover_price = Double.parseDouble(datas[37]);
+			
+			//换手率
+			change_rate = Double.parseDouble(datas[38]);
+			//市盈率
+			shiying_rate = Double.parseDouble(datas[39]);
+			
+//			zhenfu = Double.parseDouble(datas[43]);
+			
+			liutong_price = Double.parseDouble(datas[44]);
+			total_price = Double.parseDouble(datas[45]);
+			shijing_rate = Double.parseDouble(datas[46]);
+			limitUp_price = Double.parseDouble(datas[47]);
+			limitDown_price = Double.parseDouble(datas[48]);
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			this.type = type;
 		}
 
 	}
